@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
@@ -7,62 +8,89 @@ alphaDeg = 10.0
 vinf = 1.0
 
 # actual code
-nodes = []
-panels = []
+#nodes = []
+#panels = []
+#
+## nodes coordinates reading
+#nodesFile = np.loadtxt('coord_parabolic_20.dat')
+#
+#count = 1
+#for i in nodesFile:
+#    nodes.append(Node(np.array([i[0], i[1], 0.0]), count))
+#    count += 1
+#
+#for i in range(len(nodes)-1):
+#    panels.append(Panel([nodes[i], nodes[i+1]], i+1))
 
-# nodes coordinates reading
-nodesFile = np.loadtxt('coord_parabolic_20.dat')
+airfoils = []
+airfoils.append(Airfoil('coord_parabolic_20.dat'))
+#sys.exit()
 
-count = 1
-for i in nodesFile:
-    nodes.append(Node(np.array([i[0], i[1], 0.0]), count))
-    count += 1
+# induced velocity on panel i collocation point due to unit vortex on panel j (all airfoils)
+for am in airfoils:
+    for pi in am.panels:
+        for an in airfoils:
+            for pj in an.panels:
+                pi.velIndCalc(pj.qPoint)
 
-for i in range(len(nodes)-1):
-    panels.append(Panel([nodes[i], nodes[i+1]], i+1))
-
-# induced velocity on panel i collocation point due to unit vortex on panel j
-for pi in panels:
-    for pj in panels:
-        pi.velIndCalc(pj.qPoint)
+#sys.exit()
 
 # RHS (independent vector) definition
-b = np.zeros(len(panels))
+N = 0
+for a in airfoils:
+    N += a.panelNum
+
+b = np.zeros(N)
 vectorInf = np.array([vinf*np.cos(alphaDeg*np.pi/180.0), vinf*np.sin(alphaDeg*np.pi/180.0), 0.0])
 
-for p in panels:
-    b[panels.index(p)] = -np.dot(vectorInf, p.n)
+ind = 0
+for a in airfoils:
+    for p in a.panels:
+        b[ind] = -np.dot(vectorInf, p.n)
+        ind += 1
+
+#sys.exit()
 
 # influence coefficients matrix definition
-a = np.zeros((len(panels), len(panels)))
+a = np.zeros((N, N))
 
-for i in range(len(panels)):
-    for j in range (len(panels)):
-        a[i,j] = np.dot(panels[i].velInd[j], panels[i].n)
+i = 0
+for am in airfoils:
+    for pi in am.panels:
+        for j in range(N):
+            a[i,j] = np.dot(pi.velInd[j], pi.n)
+
+        i += 1
+
+#sys.exit()
 
 # linear system solution
 gamma = np.linalg.solve(a, b)
 
-for p in panels:
-    p.setGamma(gamma[panels.index(p)])
-    p.dCpCalc(vinf)
+i = 0
+for a in airfoils:
+    for p in a.panels:
+        p.setGamma(gamma[i])
+        p.dCpCalc(vinf)
+        i =+ 1
 
 # plot
 # chord vector
-cVec = panels[-1].nodes[1].coord - panels[0].nodes[0].coord
+#cVec = panels[-1].nodes[1].coord - panels[0].nodes[0].coord
 
 # airfoil chord
-c = np.linalg.norm(cVec) 
+#c = np.linalg.norm(cVec) 
+c = 1.0
 print('airfoil chord: {0:.2f} m\n'.format(c))
 
-sC = [np.dot(p.mPoint-panels[0].nodes[0].coord, cVec)/c for p in panels]
-dCpPlot = [p.dCp for p in panels]
-
-fig, ax = plt.subplots()
-ax.plot(sC, dCpPlot, 'k') 
-plt.xlabel('x/c')
-plt.ylabel('dCp')
-plt.show()
+#sC = [np.dot(p.mPoint-panels[0].nodes[0].coord, cVec)/c for p in panels]
+#dCpPlot = [p.dCp for p in panels]
+#
+#fig, ax = plt.subplots()
+#ax.plot(sC, dCpPlot, 'k') 
+#plt.xlabel('x/c')
+#plt.ylabel('dCp')
+#plt.show()
 
 # aerodynamic characteristics
 # L and Cl

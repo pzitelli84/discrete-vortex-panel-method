@@ -1,8 +1,13 @@
 import numpy as np
 
+# node class definition
+class Node:
+    def __init__(self, coord, name):
+        self.coord = coord
+        self.id = name
+
 # panel class definition
 class Panel:
-
     def __init__(self, nodes, name):
         self.velInd = []
         self.nodes = nodes
@@ -41,10 +46,23 @@ class Panel:
     def dCpCalc(self, velInf):
         self.dCp = 2*self.gamma/(velInf*self.len)
 
-# node class definition
-class Node:
+# airfoil class definition
+class Airfoil:
+    def __init__(self, coordFile):
+        self.panels = []
 
-    def __init__(self, coord, name):
-        self.coord = coord
-        self.id = name
+        # nodes coordinates reading
+        nodesFile = np.loadtxt(coordFile)
 
+        # nodes creation
+        nodes = []
+        count = 1
+        for i in nodesFile:
+            nodes.append(Node(np.array([i[0], i[1], 0.0]), count))
+            count += 1
+
+        # panels creation
+        for i in range(len(nodes)-1):
+            self.panels.append(Panel([nodes[i], nodes[i+1]], i+1))
+
+        self.panelNum = len(self.panels)
