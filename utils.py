@@ -59,10 +59,24 @@ class Airfoil:
         count = 1
         for i in nodesFile:
             nodes.append(Node(np.array([i[0], i[1], 0.0]), count))
-            count += 1
+            count = count + 1
 
         # panels creation
         for i in range(len(nodes)-1):
             self.panels.append(Panel([nodes[i], nodes[i+1]], i+1))
 
         self.panelNum = len(self.panels)
+
+        # chord calculation
+        cVec = self.panels[-1].nodes[1].coord - self.panels[0].nodes[0].coord
+        self.c = np.linalg.norm(cVec) 
+
+    # aerodynamic characteristics: Gamma, L and Cl
+    def liftCalc(self, vInf):
+        self.Gamma = 0.0
+        for p in self.panels:
+            self.Gamma = self.Gamma + p.gamma
+
+        self.L = 1.2*vInf*self.Gamma
+        self.Cl = 2.0*self.L/(1.2*vInf**2*self.c)
+        

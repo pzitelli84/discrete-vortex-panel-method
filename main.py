@@ -5,7 +5,7 @@ from utils import *
 
 # aerodynamic parameters
 alphaDeg = 10.0
-vinf = 1.0
+vInf = 1.0
 
 # actual code
 #nodes = []
@@ -24,6 +24,7 @@ vinf = 1.0
 
 airfoils = []
 airfoils.append(Airfoil('coord_parabolic_20.dat'))
+#airfoils.append(Airfoil('coord_flat_plate_10.dat'))
 #sys.exit()
 
 # induced velocity on panel i collocation point due to unit vortex on panel j (all airfoils)
@@ -33,46 +34,58 @@ for am in airfoils:
             for pj in an.panels:
                 pi.velIndCalc(pj.qPoint)
 
+#print(airfoils[0].panels[0].velInd)
+
 #sys.exit()
 
 # RHS (independent vector) definition
 N = 0
 for a in airfoils:
-    N += a.panelNum
+    N = N + a.panelNum
 
 b = np.zeros(N)
-vectorInf = np.array([vinf*np.cos(alphaDeg*np.pi/180.0), vinf*np.sin(alphaDeg*np.pi/180.0), 0.0])
+vectorInf = np.array([vInf*np.cos(alphaDeg*np.pi/180.0), vInf*np.sin(alphaDeg*np.pi/180.0), 0.0])
 
-ind = 0
+i = 0
 for a in airfoils:
     for p in a.panels:
-        b[ind] = -np.dot(vectorInf, p.n)
-        ind += 1
+        b[i] = -np.dot(vectorInf, p.n)
+        i = i + 1
 
 #sys.exit()
 
 # influence coefficients matrix definition
-a = np.zeros((N, N))
+A = np.zeros((N, N))
 
 i = 0
 for am in airfoils:
     for pi in am.panels:
         for j in range(N):
-            a[i,j] = np.dot(pi.velInd[j], pi.n)
+            A[i,j] = np.dot(pi.velInd[j], pi.n)
 
-        i += 1
+        i = i + 1
 
 #sys.exit()
 
 # linear system solution
-gamma = np.linalg.solve(a, b)
+gamma = np.linalg.solve(A, b)
 
 i = 0
 for a in airfoils:
     for p in a.panels:
         p.setGamma(gamma[i])
-        p.dCpCalc(vinf)
-        i =+ 1
+        p.dCpCalc(vInf)
+        i = i + 1
+
+    a.liftCalc(vInf)
+
+    print('Airfoil #{0:d} aerodynamic characteristics:\n'.format(list(airfoils).index(a)+1))
+    print('Gamma = {0:.4f} m2/s\n'.format(a.Gamma))
+    print('L = {0:.4f} N/m\n'.format(a.L))
+    print('Cl = {0:.4f}\n'.format(a.Cl))
+
+sys.exit()
+
 
 # plot
 # chord vector
@@ -80,8 +93,8 @@ for a in airfoils:
 
 # airfoil chord
 #c = np.linalg.norm(cVec) 
-c = 1.0
-print('airfoil chord: {0:.2f} m\n'.format(c))
+#c = 1.0
+#print('airfoil chord: {0:.2f} m\n'.format(c))
 
 #sC = [np.dot(p.mPoint-panels[0].nodes[0].coord, cVec)/c for p in panels]
 #dCpPlot = [p.dCp for p in panels]
@@ -94,15 +107,12 @@ print('airfoil chord: {0:.2f} m\n'.format(c))
 
 # aerodynamic characteristics
 # L and Cl
-Gamma = 0.0
+#Gamma = 0.0
+#
+#for g in gamma:
+#    Gamma += g
+#
+#L = 1.2*vInf*Gamma
+#cl = 2.0*L/(1.2*vInf**2*c)
 
-for g in gamma:
-    Gamma += g
-
-L = 1.2*vinf*Gamma
-cl = 2.0*L/(1.2*vinf**2*c)
-
-print('Gamma = {0:.4f} m2/s\n'.format(Gamma))
-print('L = {0:.4f} N/m\n'.format(L))
-print('Cl = {0:.4f}\n'.format(cl))
 
