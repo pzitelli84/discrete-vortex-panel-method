@@ -81,10 +81,7 @@ for a in airfoils:
 
     a.liftCalc(vInf)
 
-    print('Airfoil #{0:d} aerodynamic characteristics:\n'.format(list(airfoils).index(a)+1))
-    print('Gamma = {0:.4f} m2/s\n'.format(a.Gamma))
-    print('L = {0:.4f} N/m\n'.format(a.L))
-    print('Cl = {0:.4f}\n'.format(a.Cl))
+writeResults(airfoils)
 
 #sys.exit()
 
