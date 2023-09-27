@@ -23,7 +23,8 @@ vInf = 1.0
 #    panels.append(Panel([nodes[i], nodes[i+1]], i+1))
 
 airfoils = []
-airfoils.append(Airfoil('coord_parabolic_20.dat'))
+airfoils.append(Airfoil('coord_parabolic_front_20.dat'))
+airfoils.append(Airfoil('coord_parabolic_rear_20.dat'))
 #airfoils.append(Airfoil('coord_flat_plate_10.dat'))
 #sys.exit()
 
@@ -58,8 +59,8 @@ for a in airfoils:
 A = np.zeros((N, N))
 
 i = 0
-for am in airfoils:
-    for pi in am.panels:
+for a in airfoils:
+    for pi in a.panels:
         for j in range(N):
             A[i,j] = np.dot(pi.velInd[j], pi.n)
 
@@ -70,6 +71,7 @@ for am in airfoils:
 # linear system solution
 gamma = np.linalg.solve(A, b)
 
+# results
 i = 0
 for a in airfoils:
     for p in a.panels:
@@ -84,7 +86,7 @@ for a in airfoils:
     print('L = {0:.4f} N/m\n'.format(a.L))
     print('Cl = {0:.4f}\n'.format(a.Cl))
 
-sys.exit()
+#sys.exit()
 
 
 # plot
