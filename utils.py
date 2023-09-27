@@ -80,3 +80,21 @@ class Airfoil:
         self.L = 1.2*vInf*self.Gamma
         self.Cl = 2.0*self.L/(1.2*vInf**2*self.c)
         
+# write results to file and terminal
+def writeResults(airfoils):
+    with open('results.dat', 'w') as out:
+        print(40*'=' + '\n')
+        out.write(40*'=' + '\n')
+
+        for a in airfoils:
+            print('Airfoil #{0:d} aerodynamic characteristics:'.format(list(airfoils).index(a)+1))
+            print('Gamma = {0:.4f} m2/s'.format(a.Gamma))
+            print('L = {0:.4f} N/m'.format(a.L))
+            print('Cl = {0:.4f}\n'.format(a.Cl))
+            print(40*'=' + '\n')
+            
+            out.write('Airfoil #{0:d} aerodynamic characteristics:'.format(list(airfoils).index(a)+1))
+            out.write('Gamma = {0:.4f} m2/s'.format(a.Gamma))
+            out.write('L = {0:.4f} N/m'.format(a.L))
+            out.write('Cl = {0:.4f}\n'.format(a.Cl))
+            out.write(40*'=' + '\n')
