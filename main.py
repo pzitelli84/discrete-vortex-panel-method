@@ -24,7 +24,7 @@ vInf = 1.0
 
 airfoils = []
 airfoils.append(Airfoil('coord_parabolic_front_20.dat'))
-airfoils.append(Airfoil('coord_parabolic_rear_20.dat'))
+airfoils.append(Airfoil('coord_parabolic_rear_30.dat'))
 #airfoils.append(Airfoil('coord_flat_plate_10.dat'))
 #sys.exit()
 
@@ -87,23 +87,44 @@ writeResults(airfoils)
 
 
 # plot
-# chord vector
-#cVec = panels[-1].nodes[1].coord - panels[0].nodes[0].coord
+# airfoils
+#plt.figure(1)
+fig, ax = plt.subplots()
+for a in airfoils:
+    x = [p.nodes[0].coord[0] for p in a.panels]
+    x.append(a.panels[-1].nodes[1].coord[0])
+    y = [p.nodes[0].coord[1] for p in a.panels]
+    y.append(a.panels[-1].nodes[1].coord[1])
+    ax.plot(x, y)
+    
+plt.axis('equal')
+plt.xlabel('x [m]')
+plt.ylabel('y [m]')
+plt.grid()
+#plt.show()
+
+# delta Cp along airfoil
+f = 2
+for a in airfoils:
+    # chord vector
+    cVec = a.panels[-1].nodes[1].coord - a.panels[0].nodes[0].coord
 
 # airfoil chord
 #c = np.linalg.norm(cVec) 
 #c = 1.0
 #print('airfoil chord: {0:.2f} m\n'.format(c))
 
-#sC = [np.dot(p.mPoint-panels[0].nodes[0].coord, cVec)/c for p in panels]
-#dCpPlot = [p.dCp for p in panels]
-#
-#fig, ax = plt.subplots()
-#ax.plot(sC, dCpPlot, 'k') 
-#plt.xlabel('x/c')
-#plt.ylabel('dCp')
-#plt.show()
-
+    sC = [np.dot(p.mPoint-a.panels[0].nodes[0].coord, cVec)/a.c for p in a.panels]
+    dCpPlot = [p.dCp for p in a.panels]
+    
+    #fig, ax = plt.subplots()
+    plt.figure(f)
+    plt.plot(sC, dCpPlot, 'k') 
+    plt.xlabel('x/c')
+    plt.ylabel('dCp')
+    #plt.show()
+    f = f + 1
+plt.show()
 # aerodynamic characteristics
 # L and Cl
 #Gamma = 0.0
