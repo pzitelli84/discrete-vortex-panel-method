@@ -33,9 +33,9 @@ for am in airfoils:
     for pi in am.panels:
         for an in airfoils:
             for pj in an.panels:
-                pi.velIndCalc(pj.qPoint)
+                pi.unitVelIndCalc(pj.qPoint)
 
-#print(airfoils[0].panels[0].velInd)
+#print(airfoils[0].panels[0].unitVelInd)
 
 #sys.exit()
 
@@ -62,7 +62,7 @@ i = 0
 for a in airfoils:
     for pi in a.panels:
         for j in range(N):
-            A[i,j] = np.dot(pi.velInd[j], pi.n)
+            A[i,j] = np.dot(pi.unitVelInd[j], pi.n)
 
         i = i + 1
 
@@ -79,7 +79,14 @@ for a in airfoils:
         p.dCpCalc(vInf)
         i = i + 1
 
-    a.liftCalc(vInf)
+for aa in airfoils:
+    for p in aa.panels:
+        for ab in airfoils:
+            p.totalIndVelCalc(ab.panels)
+
+        p.liftCalc(vectorInf)
+
+    aa.liftCalc(vInf)
 
 writeResults(airfoils)
 
