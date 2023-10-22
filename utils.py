@@ -101,8 +101,21 @@ class Airfoil:
             self.Gamma = self.Gamma + p.gamma
             self.L = self.L + p.lift
 
-        #self.L = 1.2*vInf*self.Gamma
         self.Cl = 2.0*self.L/(1.2*vInf**2*self.c)
+
+# domain (grid) class definition for streamlines
+class Domain:
+    def __init__(self, nx, ny, xMin, xMax, yMin, yMax):
+
+        self.grid = []
+
+        x = np.linspace(xMin, xMax, nx)
+        y = np.linspace(yMin, yMax, ny)
+
+# grid point class definition
+class Point:
+    def __init__(self, x, y):
+        self.coord = np.array([x, y, 0.0])
         
 # write results to file and terminal
 def writeResults(airfoils):
