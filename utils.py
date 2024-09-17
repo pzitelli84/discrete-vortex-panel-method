@@ -10,7 +10,6 @@ class Node:
 class Panel:
     def __init__(self, nodes, name):
         self.unitVelInd = []
-        #self.totalVelInd = []
         self.nodes = nodes
         self.id = name
         self.lift = 0.0
@@ -50,14 +49,13 @@ class Panel:
     def dCpCalc(self, velInf):
         self.dCp = 2*self.gamma/(velInf*self.len)
 
-    # total velocity induced by all vortices
+    # total velocity induced by all vortices except itself
     def totalIndVelCalc(self, panels):
         self.totalVelInd = np.array([0.0, 0.0, 0.0])
         for p in panels:
-            distVec =  self.qPoint - p.qPoint 
-            r = np.linalg.norm(distVec)
-
-            if r != 0.0:
+            if self != p:
+                distVec =  self.qPoint - p.qPoint 
+                r = np.linalg.norm(distVec)
                 u = p.gamma*(0.5/(np.pi*r**2))*distVec[1]
                 v = - p.gamma*(0.5/(np.pi*r**2))*distVec[0]
                 self.totalVelInd = self.totalVelInd + np.array([u, v, 0.0])
