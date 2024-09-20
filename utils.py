@@ -67,7 +67,8 @@ class Panel:
 
 # airfoil class definition
 class Airfoil:
-    def __init__(self, coordFile):
+    def __init__(self, name, coordFile):
+        self.name = name
         self.panels = []
 
         # nodes coordinates reading
@@ -122,13 +123,13 @@ def writeResults(airfoils):
         out.write(40*'=' + '\n')
 
         for a in airfoils:
-            print('Airfoil #{0:d} aerodynamic characteristics:'.format(list(airfoils).index(a)+1))
+            print('Airfoil {0:s} aerodynamic characteristics:'.format(a.name))
             print('Gamma = {0:.4f} m2/s'.format(a.Gamma))
             print('L = {0:.4f} N/m'.format(a.L))
             print('Cl = {0:.4f}\n'.format(a.Cl))
             print(40*'=' + '\n')
             
-            out.write('Airfoil #{0:d} aerodynamic characteristics:\n'.format(list(airfoils).index(a)+1))
+            out.write('Airfoil {0:s} aerodynamic characteristics:\n'.format(a.name))
             out.write('Gamma = {0:.4f} m2/s\n'.format(a.Gamma))
             out.write('L = {0:.4f} N/m\n'.format(a.L))
             out.write('Cl = {0:.4f}\n'.format(a.Cl))
