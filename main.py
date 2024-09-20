@@ -12,9 +12,9 @@ vInf = 1.0
 # airfoils initialization
 airfoils = []
 
-airfoils.append(Airfoil('coord_parabolic_front_20.dat'))
-airfoils.append(Airfoil('coord_parabolic_rear_30.dat'))
-#airfoils.append(Airfoil('coord_flat_plate_10.dat'))
+airfoils.append(Airfoil('Front', 'coord_parabolic_front_20.dat'))
+airfoils.append(Airfoil('Rear', 'coord_parabolic_rear_30.dat'))
+#airfoils.append(Airfoil('Flat plate', 'coord_flat_plate_10.dat'))
 
 # induced velocity on panel i collocation point due to unit vortex on panel j (all airfoils)
 for am in airfoils:
@@ -59,31 +59,37 @@ for a in airfoils:
         p.dCpCalc(vInf)
         i = i + 1
 
-for aa in airfoils:
-    for p in aa.panels:
-        for ab in airfoils:
-            p.totalIndVelCalc(ab.panels)
+# total quantity of panels in system
+totalPanels = []
+for a in airfoils:
+    totalPanels = totalPanels + a.panels
 
+# airfoil lift
+for a in airfoils:
+    for p in a.panels:
+        p.totalIndVelCalc(totalPanels)
         p.liftCalc(vectorInf)
 
-    aa.liftCalc(vInf)
+    a.liftCalc(vInf)
 
 writeResults(airfoils)
 
-
 # plot airfoils
+airfoilsNameList = []
 fig, ax = plt.subplots()
 for a in airfoils:
+    airfoilsNameList.append(a.name)
     x = [p.nodes[0].coord[0] for p in a.panels]
     x.append(a.panels[-1].nodes[1].coord[0])
     y = [p.nodes[0].coord[1] for p in a.panels]
     y.append(a.panels[-1].nodes[1].coord[1])
-    ax.plot(x, y)
+    ax.plot(x, y, label=a.name)
     
 plt.axis('equal')
 plt.title('airfoils setup')
 plt.xlabel('x [m]')
 plt.ylabel('y [m]')
+plt.legend(airfoilsNameList)
 plt.grid()
 
 # delta Cp along airfoils
@@ -96,6 +102,7 @@ for a in airfoils:
     dCpPlot = [p.dCp for p in a.panels]
     
     plt.figure(f)
+    plt.title(a.name)
     plt.plot(sC, dCpPlot, 'k') 
     plt.xlabel('x/c')
     plt.ylabel('dCp')
