@@ -1,3 +1,8 @@
+###########################################
+# coded by Pablo N. Zitelli
+# https://www.linkedin.com/in/pablozitelli
+###########################################
+
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
