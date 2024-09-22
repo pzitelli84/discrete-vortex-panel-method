@@ -60,3 +60,6 @@ For a broader and detailed explanation, the reader is recommended to study from:
 - Low-Speed Aeroynamics, J. Katz & A. Plotkin.
 - An Introduction to Theoretical and Computational Aerodynamics, J. Moran.
 - Theoretical and Computational Aerodynamics, T. Sengupta.
+
+## Future improvements
+- Streamline plots.
