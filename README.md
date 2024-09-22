@@ -48,7 +48,7 @@ All the class definitions, functions and calculations are written in this file. 
 ## Theory background
 As was mentioned in the introduction, this approach is the simplest one can find under the vast variety of panel methods flavours. Due to its simplicity, it is very easy to be coded. Since there is not any distribution of vorticity along the panel length but a discrete vortex attached to it, the formulation of the flow tangency boundary condition is found straight forward.
 
-The induced velocities are found on every control point (located at the three-quarter panel length) pplying the Biot-Savart Law. Then, the dot product of the induced velocities times the unit normal vector of each panel is equated to zero. An linear algebraic equation system is obtained, where the vortex strengths of each panel are the unknowns.
+The induced velocities are found on every control point (located at the three-quarter panel length) pplying the Biot-Savart Law. Then, the dot product of the induced velocities times the unit normal vector of each panel is equated to zero. A linear algebraic equation system is obtained, where the vortex strengths of each panel are the unknowns.
 
 Once the system is solved, the vortex strengths are used to calculate the C<sub>p</sub> difference along the airfoils, their individual lift using the Generalized Kutta-Joukowski Theorem as well as the individual C<sub>L</sub>.
 
