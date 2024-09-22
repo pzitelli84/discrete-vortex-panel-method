@@ -57,7 +57,7 @@ An interesting issue with this type of methods is that, contrary to intuition, o
 
 ### Recommended bibliography
 For a broader and detailed explanation, the reader is recommended to study from:
-- Low-Speed Aeroynamics, J. Katz & A. Plotkin.
+- Low-Speed Aerodynamics, J. Katz & A. Plotkin.
 - An Introduction to Theoretical and Computational Aerodynamics, J. Moran.
 - Theoretical and Computational Aerodynamics, T. Sengupta.
 
