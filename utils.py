@@ -1,3 +1,8 @@
+###########################################
+# coded by Pablo N. Zitelli
+# https://www.linkedin.com/in/pablozitelli
+###########################################
+
 import numpy as np
 
 # node class definition
