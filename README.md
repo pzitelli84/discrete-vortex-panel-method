@@ -52,6 +52,10 @@ The induced velocities are found on every control point (located at the three-qu
 
 Once the system is solved, the vortex strengths are used to calculate the C<sub>p</sub> difference along the airfoils, their individual lift using the Generalized Kutta-Joukowski Theorem as well as the individual C<sub>L</sub>.
 
+### Numerical issues
+An interesting issue with this type of methods is that, contrary to intuition, oscillations on the C<sub>p</sub> difference along the airfoils chord are observed when the airfoil is discretized in a larger number of panels. The reader is encouraged to investigate this phenomenon typically found in methods with discrete unknowns values instead of distributed ones. Katz & Plotkin give some insight on this.
+
+### Recommended bibliography
 For a broader and detailed explanation, the reader is recommended to study from:
 - Low-Speed Aeroynamics, J. Katz & A. Plotkin.
 - An Introduction to Theoretical and Computational Aerodynamics, J. Moran.
