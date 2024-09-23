@@ -46,7 +46,7 @@ This is the skeleton of the script, where instructions to solve the problem are 
 All the class definitions, functions and calculations are written in this file. The code is commented so the user can quickly understand what is being done by the script. This is fundamental when comparing the code to the math found in the theory.
 
 ## Theory background
-As was mentioned in the introduction, this approach is the simplest one can find under the vast variety of panel methods flavours. Due to its simplicity, it is very easy to be coded. Since there is not any distribution of vorticity along the panel length but a discrete vortex attached to it, the formulation of the flow tangency boundary condition is found straight forward.
+As was mentioned in the introduction, this approach is the simplest one which can be found under the vast variety of panel methods flavours. Due to its simplicity, it is very easy to be coded. Since there is not any distribution of vorticity along the panel length but a discrete vortex attached to it, the formulation of the flow tangency boundary condition is found straight forward.
 
 The induced velocities are found on every control point (located at the three-quarter panel length) pplying the Biot-Savart Law. Then, the dot product of the induced velocities times the unit normal vector of each panel is equated to zero. A linear algebraic equation system is obtained, where the vortex strengths of each panel are the unknowns.
 
